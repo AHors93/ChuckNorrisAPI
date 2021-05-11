@@ -1,15 +1,14 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class SearchPage extends Component {
-    render() {
-        return (
-            <div className='search-page'>
-                <h2>Search for Jokes</h2>
-                <button>Search</button>
-                {/* <input type='text'>Type here...</input> */}
-            </div>
-        )
-    }
+const SearchBar = () => {
+    return (
+    <form action='/' method='GET'>
+        <label htmlFor='header-search'></label>
+        <input type='text' id='header-search' placeholder='Search jokes here...'> 
+        </input>
+        <button type='submit'>Search</button>
+    </form> 
+    ) 
 }
 
-export default SearchPage;
+export default SearchBar;

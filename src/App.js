@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Main from './components/routing';
+import SearchPage from './components/search';
 import axios from 'axios';
 import {
   BrowserRouter as Router,
@@ -45,8 +46,6 @@ class App extends Component {
    */
   render() {
     const { joke } = this.state
-    console.log(joke)
-    
     return(
       <Router>
         <div className='container'>
@@ -61,6 +60,9 @@ class App extends Component {
         <nav>
           <Main />
         </nav>
+        <div>
+          <SearchPage />
+        </div>
         <div>
           <nav>
             <ul>
