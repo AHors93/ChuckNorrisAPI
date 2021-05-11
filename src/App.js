@@ -1,16 +1,11 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import Main from './components/routing';
 import SearchPage from './components/search';
 import axios from 'axios';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link, } from "react-router-dom";
 
 /**
- * Step 5 - The state has been set on lines 10 & 11 and the DOM is updated
+ * Step 5 - The state has been set on lines 13 & 14 and the DOM is updated
  */
 class App extends Component {
   constructor(props) {
@@ -22,7 +17,7 @@ class App extends Component {
   
   /**
    * Step 3 - Axios sends GET request 
-   * Step 4 - Response recieved and logged in console - Line 23
+   * Step 4 - Response recieved and logged in console - Line 25
    * 
    */
   async getJoke() {
@@ -41,8 +36,8 @@ class App extends Component {
   // }
 
   /**
-   * Step 1 - User Clicks Button - Line 40
-   * Step 2 - getJoke function is called - Line 40
+   * Step 1 - User Clicks Button
+   * Step 2 - getJoke function is called
    */
   render() {
     const { joke } = this.state
@@ -61,27 +56,20 @@ class App extends Component {
           <Main />
         </nav>
         <div>
-          <SearchPage />
-        </div>
-        <div>
           <nav>
             <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/search">Search</Link>
-              </li>
+              <li><Link to="/">Home</Link></li>
+              <li><Link to="/search">Search</Link></li>
             </ul>
           </nav>
 
           {/* A <Switch> looks through its children <Route>s and
               renders the first one that matches the current URL. */}
           <Switch>
-            <Route path="Home">
+            <Route path="Home" exact component={Home}>
               <Home />
             </Route>
-            <Route path="/Search">
+            <Route path="/search" component={SearchPage}>
               <Search />
             </Route>
             <Route path="/">
@@ -94,13 +82,16 @@ class App extends Component {
   }
 }
 
-function Home() {
-  return <h2>Home</h2>;
+const Home = () => {
+    return <h2>Home</h2>;
 }
 
-function Search() {
-  return <h2>Search</h2>;
-}
+const Search = ({history}) => (
+  <Fragment>
+    <h2>Search</h2>
+    <button onClick={() => history.push('/')}>Go to home</button>
+  </Fragment>  
+)
 
 
 export default App;
