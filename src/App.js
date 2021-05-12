@@ -1,25 +1,20 @@
-import React, {Component, Fragment} from 'react';
-import Main from './components/routing';
-import SearchPage from './components/search';
+import React, {Component} from 'react';
 import axios from 'axios';
-import { BrowserRouter as Router, Switch, Route, Link, } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
-/**
- * Step 5 - The state has been set on lines 13 & 14 and the DOM is updated
- */
+import RandomJoke from './components/pages/random';
+import SearchBar from './components/pages/search';
+
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       joke: {},
+      search: '',
+      searchLastName: ''
     };
   }
   
-  /**
-   * Step 3 - Axios sends GET request 
-   * Step 4 - Response recieved and logged in console - Line 25
-   * 
-   */
   async getJoke() {
     try {
       const response = await axios.get('http://api.icndb.com/jokes/random')
@@ -29,69 +24,81 @@ class App extends Component {
     }
   }
 
-  // async searchJoke() {
-  //   try {
-  //     const searchResponse = await axios.get('')
-  //   }
-  // }
+  searchJoke(event) {
+    event.preventDefault()
+    const { search } = this.state
+    const { searchLastName } = this.state
 
-  /**
-   * Step 1 - User Clicks Button
-   * Step 2 - getJoke function is called
-   */
+    axios
+      .get(`http://api.icndb.com/jokes/random`, { params: { firstName: search, lastName: searchLastName } })
+      .then((result => {
+        if(result.status === 200) {
+          this.setState({ joke: result.data.value })
+        }
+      }))
+  }
+
   render() {
-    const { joke } = this.state
     return(
       <Router>
-        <div className='container'>
-          <h1>Chuck Norris Jokes</h1>
-          <h3>Here's one..{joke && joke.id ? <b>{joke.joke}</b>: ''}</h3>
-          <button type='button' 
-            className='random-button'
-            onClick={() => this.getJoke()}> 
-            Random Chuck Jokes!
-          </button>
-        </div>
-        <nav>
-          <Main />
-        </nav>
-        <div>
-          <nav>
-            <ul>
-              <li><Link to="/">Home</Link></li>
-              <li><Link to="/search">Search</Link></li>
-            </ul>
-          </nav>
-
-          {/* A <Switch> looks through its children <Route>s and
-              renders the first one that matches the current URL. */}
-          <Switch>
-            <Route path="Home" exact component={Home}>
-              <Home />
-            </Route>
-            <Route path="/search" component={SearchPage}>
-              <Search />
-            </Route>
-            <Route path="/">
-              <Home />
-            </Route>
-          </Switch>
-        </div>
-      </Router>
+        <div id="container">
+          <div id="top">
+            {/* <Logo Chuck Norris Face/>
+            <Header /> */}
+          </div>
+          <div id="bottom">
+            {/* <Sidebar for links/> */}
+            <div id="page-container">
+              <Switch>
+                <Route exact path="/" >
+                    <HomePage />
+                </Route>
+                <Route exact path="/search" >
+                    <SearchPage />
+                </Route>    
+                <Route exact path="/random">
+                    <RandomPage />
+                </Route>
+              </Switch>
+            </div>   
+          </div>        
+          <div>
+            <nav>
+              <ul>
+                <li><Link to="/">Home</Link></li>
+                <li><Link to="/search">Search</Link></li>
+                <li><Link to="/random">Random</Link></li>
+              </ul>
+            </nav>
+          </div>
+        </div>        
+        </Router>
     );
   }
 }
 
-const Home = () => {
-    return <h2>Home</h2>;
+const HomePage = () => {
+    return <p>Welcome to my site</p>
 }
 
-const Search = ({history}) => (
-  <Fragment>
-    <h2>Search</h2>
-    <button onClick={() => history.push('/')}>Go to home</button>
-  </Fragment>  
-)
+const SearchPage = () => {
+  return (
+   <div>
+     <p>Search Page</p>
+     <SearchBar />
+   </div> 
+  )
+}
+
+const RandomPage = () => {
+  return ( 
+    <div>
+      <p>Random Joke</p>
+      <RandomJoke />
+    </div>
+  )
+}
+
 
 
 export default App;
