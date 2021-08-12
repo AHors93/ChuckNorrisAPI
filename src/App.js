@@ -14,15 +14,6 @@ class App extends Component {
       searchLastName: ''
     };
   }
-  
-  async getJoke() {
-    try {
-      const response = await axios.get('http://api.icndb.com/jokes/random')
-      this.setState({joke: response.data.value})
-    } catch (error) {
-      console.error(error)
-    }
-  }
 
   searchJoke(event) {
     event.preventDefault()
