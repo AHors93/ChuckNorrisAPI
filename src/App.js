@@ -9,26 +9,19 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      joke: {},
-      search: '',
-      searchLastName: ''
-    };
+      joke: {},      
+    }; 
   }
 
-  searchJoke(event) {
-    event.preventDefault()
-    const { search } = this.state
-    const { searchLastName } = this.state
-
+  handleSearch(searchInput) {
     axios
-      .get(`http://api.icndb.com/jokes/random`, { params: { firstName: search, lastName: searchLastName } })
-      .then((result => {
+      .get(`http://api.icndb.com/jokes/random`, { params: { firstName: searchInput } })
+      .then(result => {
         if(result.status === 200) {
           this.setState({ joke: result.data.value })
         }
-      }))
+      })
   }
-
   render() {
     return(
       <Router>
@@ -45,7 +38,7 @@ class App extends Component {
                     <HomePage />
                 </Route>
                 <Route exact path="/search" >
-                    <SearchPage />
+                    <SearchPage onSearchResult={(value) => this.handleSearch(value)} />
                 </Route>    
                 <Route exact path="/random">
                     <RandomPage />
@@ -72,11 +65,11 @@ const HomePage = () => {
     return <p>Welcome to my site</p>
 }
 
-const SearchPage = () => {
+const SearchPage = ({onSearchResult}) => {
   return (
    <div>
      <p>Search Page</p>
-     <SearchBar />
+     <SearchBar onSearchResult={onSearchResult}/>
    </div> 
   )
 }
