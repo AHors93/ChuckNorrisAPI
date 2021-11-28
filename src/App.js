@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import RandomJoke from './components/pages/random';
 import SearchBar from './components/pages/search';
+import NewJoke from './components/pages/displayNewJoke';
 
 class App extends Component {
   constructor(props) {
@@ -13,9 +14,9 @@ class App extends Component {
     }; 
   }
 
-  handleSearch(searchInput) {
+  handleSearch(searchInput, secondInput) {
     axios
-      .get(`http://api.icndb.com/jokes/random`, { params: { firstName: searchInput } })
+      .get(`http://api.icndb.com/jokes/random`, { params: { firstName: searchInput, secondName: secondInput }, })
       .then(result => {
         if(result.status === 200) {
           this.setState({ joke: result.data.value })
@@ -43,6 +44,9 @@ class App extends Component {
                 <Route exact path="/random">
                     <RandomPage />
                 </Route>
+                <Route exact path="/newjoke">
+                    <NewJokePage />
+                </Route>
               </Switch>
             </div>   
           </div>        
@@ -52,6 +56,7 @@ class App extends Component {
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/search">Search</Link></li>
                 <li><Link to="/random">Random</Link></li>
+                <li><Link to="/newjoke">New Main Character</Link></li>
               </ul>
             </nav>
           </div>
@@ -79,6 +84,15 @@ const RandomPage = () => {
     <div>
       <p>Random Joke</p>
       <RandomJoke />
+    </div>
+  )
+}
+
+const NewJokePage = () => {
+  return (
+    <div>
+      <p>Changing Name of Main Character</p>
+      <NewJoke />
     </div>
   )
 }
